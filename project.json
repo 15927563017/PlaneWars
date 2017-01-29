@@ -1,0 +1,23 @@
+{
+    "project_type": "javascript",
+
+    "debugMode" : 1,
+    "showFPS" : true,
+    "frameRate" : 60,
+    "noCache" : false,
+    "id" : "gameCanvas",
+    "renderMode" : 0,
+    "engineDir":"frameworks/cocos2d-html5",
+
+    "modules" : ["cocos2d"],
+
+    "jsList" : [
+        "src/resource.js",
+        "src/app.js",
+        "src/Element/Player.js",
+        "src/Element/Bullet.js",
+        "src/Element/Enemys.js",
+        "src/scene/GameScene.js",
+        "src/scene/GameWelcomeScene.js"
+    ]
+}

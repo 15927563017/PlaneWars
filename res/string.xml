@@ -1,0 +1,22 @@
+<dict>  
+    <key>score</key>  
+    <string>分数：</string>  
+    <key>life</key>  
+    <string>血量：</string>  
+	<key>gameover</key>  
+    <string>游戏结束</string>
+    <key>restart</key>  
+    <string>重新开始</string>  	
+	<key>start</key>  
+    <string>开始游戏</string>  	
+	<key>gamename</key>  
+    <string>飞机大战</string>
+	<key>help</key>  
+    <string>帮助</string>
+	<key>exitgame</key>  
+    <string>退出</string>
+	<key>returnmain</key>  
+    <string>返回主页</string>
+	<key>score</key>  
+    <string>得分：</string>
+</dict>  
