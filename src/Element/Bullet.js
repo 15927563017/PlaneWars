@@ -49,7 +49,7 @@ var BulletLayer = cc.Layer.extend({
         var bullet = new cc.Sprite();
         var pngRes = this.is_enemy ? res.Enemy_Bullet_png : res.Player1_Bullet_png;
         var bFrame1 = new cc.SpriteFrame(pngRes,new cc.rect(0,0,16,16));
-        var bFrame2 = new cc.SpriteFrame(pngRes,new cc.rect(16,0,16,16));
+        var bFrame2 = new cc.SpriteFrame(pngRes ,new cc.rect(16,0,16,16));
         var animation = new cc.Animation();
         animation.addSpriteFrame(bFrame1);
         animation.addSpriteFrame(bFrame2);
@@ -75,6 +75,9 @@ var BulletLayer = cc.Layer.extend({
         this.bullets.push(bullet);
         this.container.addChild(bullet,5);
         //alert('f');
+    },
+    stopAddBullet : function () {
+        this.unschedule(this.addNewBullet);
     }
 
 

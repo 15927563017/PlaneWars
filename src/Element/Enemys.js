@@ -49,11 +49,13 @@ var EnemysPlayer = cc.Layer.extend({
             directionDegree :Math.random()*360 - 180
         });
         var bullet = new BulletLayer(true, enemy);
+        enemy._bullet = bullet;
         this.container.addChild(bullet, 5);
         this.enemys.push(enemy);
         this.container.addChild(enemy,5);
         //alert('f');
-    }
+    },
+
 
 
 });

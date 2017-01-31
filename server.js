@@ -1,7 +1,7 @@
 'use strict';
 var http = require('http');
 var fs = require('fs');
-var baseDir = 'E:/cocos2d-x-3.14/cocos2d-x-3.14/tools/cocos2d-console/bin/TankWar';
+var baseDir = 'E:/PlaneWars/PlaneWars';
 http.createServer(function(req,res){
 	//console.log(req.url);
 	var fileName = baseDir + req.url;

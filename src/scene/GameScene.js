@@ -91,7 +91,38 @@ var GameScenelayer = cc.Layer.extend({
     onTouchCancelled : function (touch, event) {
         return false;
     },
-    update : function(){
+    update : function() {
+        //我方子弹与敌方飞机碰撞检测
+        var i, j;
+        for(i = 0; i < this.enemys.enemys.length; i++) {
+            for (j = 0; j < this.player_bullets.bullets.length; j++){
+                console.log(this.enemys.enemys.length + " " + this.player_bullets.bullets.length);
+                if(this.enemys.enemys[i] === undefined || this.player_bullets.bullets[j] === undefined){
+                    continue;
+                }
+                if(cc.rectIntersectsRect(this.enemys.enemys[i].getBoundingBox(), this.player_bullets.bullets[j].getBoundingBox())){
+                    this.enemys.container.removeChild(this.enemys.enemys[i]);
+                    this.player_bullets.container.removeChild(this.player_bullets.bullets[j]);
+                    this.enemys.enemys[i]._bullet.stopAddBullet();
+                    this.enemys.enemys.splice(i,1);
+                    this.player_bullets.bullets.splice(j,1);
+                    i--;
+                    j=0;
+                }
+            }
+        }
+
+        for(i = 0; i < this.enemys.enemys.length; i++){
+            var bul = this.enemys.enemys[i]._bullet;
+            for(j = 0; j < bul.bullets.length; j++){
+                var distance = cc.pDistance(this.player.player.getPosition(), bul.bullets[j].getPosition());
+                var radiusSum = this.player.player.radius + bul.bullets[j].radius;
+                cc.log("distance:" + distance + "; radius:" + radiusSum);
+                if(distance < radiusSum){
+                   alert('f');
+                }
+            }
+        }
 
     }
 
