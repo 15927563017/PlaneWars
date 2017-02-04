@@ -5,9 +5,10 @@ var PlayerLayer = cc.Layer.extend({
     ctor : function () {
         this._super();
 
+
         var size = cc.winSize;
         var minlength = size.width > size.height ? size.height : size.width;
-        this._player_scale_number = minlength / 900;
+        this._player_scale_number = minlength / 1000;
         //add player's plane
         this.player = new cc.Sprite(res.Player1_png,new cc.rect(117 ,0,80,87));
         this.player.setScale(this._player_scale_number);

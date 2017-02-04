@@ -4,18 +4,37 @@ var GameScenelayer = cc.Layer.extend({
     player : null,
     player_bullets : null,
     enemys : null,
+    score : 0,
+    _life_layer : null,
+    _score_label : null,
+    _scale_number : null,
+    _bloodBar_desc_Len : null,
     ctor : function () {
         this._super();
-        //add background
         var size = cc.winSize;
+        var minlength = size.width > size.height ? size.height : size.width;
+        this._scale_number = minlength / 850;
         /*
         this.background = new cc.Sprite(res.Background_png,new cc.rect(0,0,size.width,size.height));
         this.background.attr({
             x: size.width / 2,
             y: size.height / 2
         });*/
+        //add background
         this.background = new cc.LayerColor(cc.color(0,0,0),size.width,size.height);
         this.addChild(this.background, 0);
+        //add bloodBar
+        this._life_layer = new cc.LayerColor(cc.color(255,0,0), 140 * this._scale_number, 25 * this._scale_number);
+        this._life_layer.x = size.width - 160 * this._scale_number;
+        this._life_layer.y = size.height - 35 * this._scale_number;
+        this.addChild(this._life_layer, 1);
+        //ten lifes
+        this._bloodBar_desc_Len = 140 * this._scale_number / 10;
+        //add label
+        this._score_label = new cc.LabelTTF('Score:'+this.score, 'Arial', 20);
+        this._score_label.x = 50;
+        this._score_label.y = size.height - 20;
+        this.addChild(this._score_label);
         //add playerLayer
         this.player = new PlayerLayer();
         this.addChild(this.player,1);
@@ -96,7 +115,12 @@ var GameScenelayer = cc.Layer.extend({
     onTouchCancelled : function (touch, event) {
         return false;
     },
+    _blinkCallFunc : function(){
+        this.setVisible(true);
+       // alert('f');
+    },
     update : function() {
+        this._score_label.setString('Score:'+this.score);
         //我方子弹与敌方飞机碰撞检测
         var i, j;
         for(i = 0; i < this.enemys.enemys.length; i++) {
@@ -117,11 +141,12 @@ var GameScenelayer = cc.Layer.extend({
                     //用粒子系统实现爆炸效果
                     var particleSystem = new cc.ParticleSystem(res.Particle);
                     this.addChild(particleSystem);
-                    particleSystem.setScale(this.enemys._enemy_scale_number);
+                    particleSystem.setScale(this._scale_number);
                     particleSystem.duration = 0.5;
                     particleSystem.x = this.enemys.enemys[i].getPosition().x;
                     particleSystem.y = this.enemys.enemys[i].getPosition().y - 50;
                     //碰撞处理
+                    this.score = this.score + 5;
                     this.enemys.container.removeChild(this.enemys.enemys[i]);
                     this.player_bullets.container.removeChild(this.player_bullets.bullets[j]);
                     this.enemys.enemys[i]._bullet.stopAddBullet();
@@ -147,6 +172,20 @@ var GameScenelayer = cc.Layer.extend({
                 if(cc.rectIntersectsRect(this.player.player.getBoundingBox(), bul.bullets[j].getBoundingBox())){
                     bul.container.removeChild(bul.bullets[j]);
                     //alert('f');
+                    var box = this._life_layer.getBoundingBox();
+                    if( box.width - this._bloodBar_desc_Len < 1){//血条空了
+                        var scene = new GameOverScene();
+                        cc.director.runScene(new cc.TransitionFade(2,scene));
+                    }
+                    this._life_layer.setContentSize(box.width - this._bloodBar_desc_Len, box.height);
+                    if(this._last_action != undefined){
+                        this.player.player.stopAction(this._last_action);
+                    }
+                    var action = cc.blink(1,2);
+                    var callFunc = cc.callFunc(this._blinkCallFunc,this.player.player);
+                    var sequence = cc.sequence(action, callFunc);
+                    this.player.player.runAction(sequence);
+                    this._last_action = action;
                     bul.bullets.splice(j,1);
                     j--;
                 }
