@@ -1,27 +1,20 @@
 
 var GameWelcomeLayer = cc.Layer.extend({
-    sprite:null,
+    background:null,
     ctor:function () {
         this._super();
         var size = cc.winSize;
+        //add label
         var helloLabel = new cc.LabelTTF("飞机大战", "Arial", 38);
+        helloLabel.color = cc.color(0,0,0,0.96);
         helloLabel.x = size.width / 2;
         helloLabel.y = size.height / 2 + 200;
         this.addChild(helloLabel, 5);
+        //add background
+        this.background = new cc.LayerColor(cc.color(60,60,60),size.width,size.height);
 
-        this.sprite = new cc.Sprite(res.Background_png,new cc.rect(0,0,size.width,size.height));
-        var param = {}
-        param.minFilter = gl.LINEAR;
-        param.magFilter = gl.LINEAR;
-        param.wrapS = gl.REPEAT;
-        param.wrapT = gl.REPEAT;
-        this.sprite.getTexture().setTexParameters(param);
-        this.sprite.attr({
-            x: size.width / 2,
-            y: size.height / 2
-        });
-        this.addChild(this.sprite, 0); 
-
+        this.addChild(this.background, 0);
+        //add menu
         var menuFont1 = new cc.MenuItemFont("开始游戏",this.startGame,this);
         menuFont1.fontSize = 22;
         menuFont1.fontName = 'Arial';

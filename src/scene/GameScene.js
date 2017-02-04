@@ -1,5 +1,5 @@
 var GameScenelayer = cc.Layer.extend({
-    sprite1 : null,
+    background : null,
     _bg_speed : 1,
     player : null,
     player_bullets : null,
@@ -8,12 +8,16 @@ var GameScenelayer = cc.Layer.extend({
         this._super();
         //add background
         var size = cc.winSize;
-        this.sprite1 = new cc.Sprite(res.Background_png,new cc.rect(0,0,size.width,size.height));
-        this.sprite1.attr({
+        /*
+        this.background = new cc.Sprite(res.Background_png,new cc.rect(0,0,size.width,size.height));
+        this.background.attr({
             x: size.width / 2,
             y: size.height / 2
-        });
-        this.addChild(this.sprite1, 0);
+        });*/
+        this.background = new cc.LayerColor(cc.color(0,0,0),size.width,size.height);
+        this.addChild(this.background, 0);
+
+
         //add playerLayer
         this.player = new PlayerLayer();
         this.addChild(this.player,1);
@@ -96,11 +100,26 @@ var GameScenelayer = cc.Layer.extend({
         var i, j;
         for(i = 0; i < this.enemys.enemys.length; i++) {
             for (j = 0; j < this.player_bullets.bullets.length; j++){
-                console.log(this.enemys.enemys.length + " " + this.player_bullets.bullets.length);
+              //  console.log(this.enemys.enemys.length + " " + this.player_bullets.bullets.length);
                 if(this.enemys.enemys[i] === undefined || this.player_bullets.bullets[j] === undefined){
                     continue;
                 }
                 if(cc.rectIntersectsRect(this.enemys.enemys[i].getBoundingBox(), this.player_bullets.bullets[j].getBoundingBox())){
+                    /*
+                    var particleSystem = new cc.ParticleExplosion();
+                    particleSystem.texture = cc.textureCache.addImage(res.Particle_png);
+                    particleSystem.x = this.enemys.enemys[i].getPosition().x;
+                    particleSystem.y = this.enemys.enemys[i].getPosition().y;
+                    particleSystem.endRadius = 20;
+                    particleSystem.endRadiusVar = 10;
+                    this.addChild(particleSystem);*/
+                    //用粒子系统实现爆炸效果
+                    var particleSystem = new cc.ParticleSystem(res.Particle);
+                    this.addChild(particleSystem);
+                    particleSystem.duration = 0.5;
+                    particleSystem.x = this.enemys.enemys[i].getPosition().x;
+                    particleSystem.y = this.enemys.enemys[i].getPosition().y - 50;
+                    //碰撞处理
                     this.enemys.container.removeChild(this.enemys.enemys[i]);
                     this.player_bullets.container.removeChild(this.player_bullets.bullets[j]);
                     this.enemys.enemys[i]._bullet.stopAddBullet();
@@ -111,15 +130,23 @@ var GameScenelayer = cc.Layer.extend({
                 }
             }
         }
-
-        for(i = 0; i < this.enemys.enemys.length; i++){
-            var bul = this.enemys.enemys[i]._bullet;
+        //敌方子弹与我发飞机碰撞检测
+        for(i = 0; i < this.enemys.enemyBullets.length; i++){
+            var bul = this.enemys.enemyBullets[i];
+            //子弹层中没有子弹存在了，清除子弹层节点
+            if(bul.bullets.length === 0 && !bul.began){
+                this.enemys.removeChild(bul);
+                this.enemys.enemyBullets.splice(i,1);
+                i--;
+                //alert('dg');
+            }
             for(j = 0; j < bul.bullets.length; j++){
-                var distance = cc.pDistance(this.player.player.getPosition(), bul.bullets[j].getPosition());
-                var radiusSum = this.player.player.radius + bul.bullets[j].radius;
-                cc.log("distance:" + distance + "; radius:" + radiusSum);
-                if(distance < radiusSum){
-                   alert('f');
+                //发生碰撞
+                if(cc.rectIntersectsRect(this.player.player.getBoundingBox(), bul.bullets[j].getBoundingBox())){
+                    bul.container.removeChild(bul.bullets[j]);
+                    //alert('f');
+                    bul.bullets.splice(j,1);
+                    j--;
                 }
             }
         }

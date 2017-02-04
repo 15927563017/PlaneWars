@@ -1,6 +1,7 @@
 var BulletLayer = cc.Layer.extend({
     bullets : null,
     is_enemy : null,
+    began : null,
     _enemy_bullet_speed : 2,
     _player_bullet_speed : 4,
     _enemy_bullet_add : 1.6,
@@ -10,6 +11,7 @@ var BulletLayer = cc.Layer.extend({
     ctor : function (isEnemy, mPlane ) {
         this._super();
         this.is_enemy = isEnemy;
+        this.began = true;
         this.plane = mPlane;
         var size = cc.winSize;
         this.bullets = new Array();
@@ -78,6 +80,7 @@ var BulletLayer = cc.Layer.extend({
     },
     stopAddBullet : function () {
         this.unschedule(this.addNewBullet);
+        this.began = false;
     }
 
 

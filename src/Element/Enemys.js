@@ -1,6 +1,6 @@
 var EnemysPlayer = cc.Layer.extend({
     enemys : null,
-    bullets : null,
+    enemyBullets : null,
     container : null,
     _enemy_speed : 4,
     ctor : function () {
@@ -8,7 +8,7 @@ var EnemysPlayer = cc.Layer.extend({
 
         var size = cc.winSize;
         this.enemys = new Array();
-        this.bullets = new Array();
+        this.enemyBullets = new Array();
         this.container = new cc.Sprite();
         //
         this.addChild(this.container);
@@ -38,7 +38,7 @@ var EnemysPlayer = cc.Layer.extend({
             enemy.setPositionX(enemy.getPositionX() + Math.sin((enemy.directionDegree ) * 3.141592 / 180 ) * this._enemy_speed);
             enemy.setPositionY(enemy.getPositionY() + Math.cos((enemy.directionDegree ) * 3.141592 / 180 ) * this._enemy_speed);
         }
-        console.log(this.enemys.length);
+        //console.log(this.enemys.length);
     },
     addNewEnemy : function () {
         var enemy = new cc.Sprite(res.Enemy1_png,new cc.rect(0,0,49,58));
@@ -50,6 +50,7 @@ var EnemysPlayer = cc.Layer.extend({
         });
         var bullet = new BulletLayer(true, enemy);
         enemy._bullet = bullet;
+        this.enemyBullets.push(bullet);
         this.container.addChild(bullet, 5);
         this.enemys.push(enemy);
         this.container.addChild(enemy,5);

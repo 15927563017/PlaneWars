@@ -6,6 +6,8 @@ var res = {
     Enemy_Bullet_png : "res/bullet2.png",
     Player1_Tail_png : "res/player1-tail.png",
     Enemy1_png : "res/enemy1.png",
+    Particle_png : "res/particle.png",
+    Particle : "res/particle.plist",
 };
 
 var g_resources = [];
