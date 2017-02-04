@@ -16,8 +16,6 @@ var GameScenelayer = cc.Layer.extend({
         });*/
         this.background = new cc.LayerColor(cc.color(0,0,0),size.width,size.height);
         this.addChild(this.background, 0);
-
-
         //add playerLayer
         this.player = new PlayerLayer();
         this.addChild(this.player,1);
@@ -83,7 +81,10 @@ var GameScenelayer = cc.Layer.extend({
         this.scheduleUpdate();
     },
     onTouchBegan : function (touch, event) {
-        alert(touch.getLocation().x);
+        var pos = touch.getLocation();
+        //alert(pos.x+ " "+ pos.y);
+        var target = event.getCurrentTarget();
+        target.player.moveToP(pos);
         return false;
     },
     onTouchMoved : function (touch, event) {
@@ -116,6 +117,7 @@ var GameScenelayer = cc.Layer.extend({
                     //用粒子系统实现爆炸效果
                     var particleSystem = new cc.ParticleSystem(res.Particle);
                     this.addChild(particleSystem);
+                    particleSystem.setScale(this.enemys._enemy_scale_number);
                     particleSystem.duration = 0.5;
                     particleSystem.x = this.enemys.enemys[i].getPosition().x;
                     particleSystem.y = this.enemys.enemys[i].getPosition().y - 50;

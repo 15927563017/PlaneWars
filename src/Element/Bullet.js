@@ -6,6 +6,7 @@ var BulletLayer = cc.Layer.extend({
     _player_bullet_speed : 4,
     _enemy_bullet_add : 1.6,
     _player_bullet_add : 0.8,
+    _bullet_scale_number : null,
     plane : null,
     container : null,
     ctor : function (isEnemy, mPlane ) {
@@ -14,6 +15,8 @@ var BulletLayer = cc.Layer.extend({
         this.began = true;
         this.plane = mPlane;
         var size = cc.winSize;
+        var minlength = size.width > size.height ? size.height : size.width;
+        this._bullet_scale_number = minlength / 850;
         this.bullets = new Array();
         this.container = new cc.Sprite();
         this.addChild(this.container,1);
@@ -48,7 +51,9 @@ var BulletLayer = cc.Layer.extend({
         //console.log(this.bullets.length);
     },
     addNewBullet : function () {
+
         var bullet = new cc.Sprite();
+        bullet.setScale(this._bullet_scale_number);
         var pngRes = this.is_enemy ? res.Enemy_Bullet_png : res.Player1_Bullet_png;
         var bFrame1 = new cc.SpriteFrame(pngRes,new cc.rect(0,0,16,16));
         var bFrame2 = new cc.SpriteFrame(pngRes ,new cc.rect(16,0,16,16));

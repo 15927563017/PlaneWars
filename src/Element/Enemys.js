@@ -3,10 +3,13 @@ var EnemysPlayer = cc.Layer.extend({
     enemyBullets : null,
     container : null,
     _enemy_speed : 4,
+    _enemy_scale_number : null,
     ctor : function () {
         this._super();
 
         var size = cc.winSize;
+        var minlength = size.width > size.height ? size.height : size.width;
+        this._enemy_scale_number = minlength / 850;
         this.enemys = new Array();
         this.enemyBullets = new Array();
         this.container = new cc.Sprite();
@@ -43,6 +46,7 @@ var EnemysPlayer = cc.Layer.extend({
     addNewEnemy : function () {
         var enemy = new cc.Sprite(res.Enemy1_png,new cc.rect(0,0,49,58));
         var size = cc.winSize;
+        enemy.setScale(this._enemy_scale_number);
         enemy.attr({
             x: Math.random()*(size.width - enemy.getContentSize().width) + enemy.getContentSize().width / 2,
             y: Math.random()*(size.height - enemy.getContentSize().height) + enemy.getContentSize().height / 2,
