@@ -20,12 +20,12 @@ var GameWelcomeLayer = cc.Layer.extend({
         menuFont1.fontName = 'Arial';
         menuFont1.color = cc.color(0,0,0,0.86);
         menuFont1.setPosition(cc.p(0,0));
-        var menuFont2 = new cc.MenuItemFont("排行版",this.help,this);
+        var menuFont2 = new cc.MenuItemFont("排行版",this.rank,this);
         menuFont2.fontSize = 22;
         menuFont2.fontName = 'Arial';
         menuFont2.color = cc.color(0,0,0,0.86);
         menuFont2.setPosition(cc.p(0,-50));
-        var menuFont3 = new cc.MenuItemFont("帮助",this.rank,this);
+        var menuFont3 = new cc.MenuItemFont("帮助",this.help,this);
         menuFont3.fontSize = 22;
         menuFont3.fontName = 'Arial';
         menuFont3.color = cc.color(0,0,0,0.86);
@@ -42,10 +42,11 @@ var GameWelcomeLayer = cc.Layer.extend({
         cc.director.runScene(new cc.TransitionFade(2,gameScene));
     },
     help : function () {
-        alert('help');
+        var helpScene = new GameHelpScene();
+        cc.director.runScene(new cc.TransitionFade(2,helpScene));
     },
     rank : function () {
-        alert('rank');
+        alert('排行榜功能尚未实现');
     }
 });
 

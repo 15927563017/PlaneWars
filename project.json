@@ -18,6 +18,7 @@
         "src/Element/Bullet.js",
         "src/Element/Enemys.js",
         "src/scene/GameScene.js",
+        "src/scene/GameHelpScene.js",
         "src/scene/GameWelcomeScene.js",
         "src/scene/GameOverScene.js"
     ]

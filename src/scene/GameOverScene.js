@@ -1,11 +1,11 @@
 
 var GameOverLayer = cc.Layer.extend({
     background:null,
-    ctor:function () {
+    ctor:function (args) {
         this._super();
         var size = cc.winSize;
         //add label
-        var helloLabel = new cc.LabelTTF("游戏结束", "Arial", 38);
+        var helloLabel = new cc.LabelTTF("游戏结束\n\n得分："+args, "Arial", 38);
         helloLabel.color = cc.color(0,0,0,0.96);
         helloLabel.x = size.width / 2;
         helloLabel.y = size.height / 2 + 200;
@@ -51,9 +51,14 @@ var GameOverLayer = cc.Layer.extend({
 });
 
 var GameOverScene = cc.Scene.extend({
+    _score : null,
+    ctor : function (args) {
+        this._super();
+        this._score = args;
+    },
     onEnter:function () {
         this._super();
-        var layer = new GameOverLayer();
+        var layer = new GameOverLayer(this._score);
         this.addChild(layer);
     }
 });

@@ -4,9 +4,10 @@ var EnemysPlayer = cc.Layer.extend({
     container : null,
     _enemy_speed : 4,
     _enemy_scale_number : null,
-    ctor : function () {
+    _player : null,
+    ctor : function (args) {
         this._super();
-
+        this._player = args;
         var size = cc.winSize;
         var minlength = size.width > size.height ? size.height : size.width;
         this._enemy_scale_number = minlength / 850;
@@ -52,6 +53,10 @@ var EnemysPlayer = cc.Layer.extend({
             y: Math.random()*(size.height - enemy.getContentSize().height) + enemy.getContentSize().height / 2,
             directionDegree :Math.random()*360 - 180
         });
+        //禁止敌方飞机出现的地方与玩家飞机重合
+        if(cc.rectIntersectsRect(enemy.getBoundingBox(), this._player.player.getBoundingBox())){
+            return;
+        }
         var bullet = new BulletLayer(true, enemy);
         enemy._bullet = bullet;
         this.enemyBullets.push(bullet);

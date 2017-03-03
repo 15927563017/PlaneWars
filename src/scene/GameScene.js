@@ -9,6 +9,7 @@ var GameScenelayer = cc.Layer.extend({
     _score_label : null,
     _scale_number : null,
     _bloodBar_desc_Len : null,
+    _player_lifes : 10,
     ctor : function () {
         this._super();
         var size = cc.winSize;
@@ -29,7 +30,7 @@ var GameScenelayer = cc.Layer.extend({
         this._life_layer.y = size.height - 35 * this._scale_number;
         this.addChild(this._life_layer, 1);
         //ten lifes
-        this._bloodBar_desc_Len = 140 * this._scale_number / 10;
+        this._bloodBar_desc_Len = 140 * this._scale_number / this._player_lifes;
         //add label
         this._score_label = new cc.LabelTTF('Score:'+this.score, 'Arial', 20);
         this._score_label.x = 50;
@@ -42,7 +43,7 @@ var GameScenelayer = cc.Layer.extend({
         this.player_bullets = new BulletLayer(false,this.player);
         this.addChild(this.player_bullets,1);
         //add enemys
-        this.enemys = new EnemysPlayer();
+        this.enemys = new EnemysPlayer(this.player);
         this.addChild(this.enemys,1);
         //add keyboard event
         if( 'keyboard' in cc.sys.capabilities ){
@@ -157,6 +158,7 @@ var GameScenelayer = cc.Layer.extend({
                 }
             }
         }
+
         //敌方子弹与我发飞机碰撞检测
         for(i = 0; i < this.enemys.enemyBullets.length; i++){
             var bul = this.enemys.enemyBullets[i];
@@ -174,7 +176,7 @@ var GameScenelayer = cc.Layer.extend({
                     //alert('f');
                     var box = this._life_layer.getBoundingBox();
                     if( box.width - this._bloodBar_desc_Len < 1){//血条空了
-                        var scene = new GameOverScene();
+                        var scene = new GameOverScene(this.score);
                         cc.director.runScene(new cc.TransitionFade(2,scene));
                     }
                     this._life_layer.setContentSize(box.width - this._bloodBar_desc_Len, box.height);
@@ -189,6 +191,20 @@ var GameScenelayer = cc.Layer.extend({
                     bul.bullets.splice(j,1);
                     j--;
                 }
+            }
+        }
+
+        //敌方飞机与我方飞机碰撞检测
+        for(i = 0; i < this.enemys.enemys.length; i++){
+            if(cc.rectIntersectsRect(this.enemys.enemys[i].getBoundingBox(), this.player.player.getBoundingBox())){
+                var particleSystem = new cc.ParticleSystem(res.Particle);
+                this.addChild(particleSystem);
+                particleSystem.setScale(this._scale_number + 0.3);
+                particleSystem.duration = 0.01;
+                particleSystem.x = this.player.player.getPosition().x;
+                particleSystem.y = this.player.player.getPosition().y - 50;
+                var scene = new GameOverScene(this.score);
+                cc.director.runScene(new cc.TransitionFade(0.2,scene));
             }
         }
 
